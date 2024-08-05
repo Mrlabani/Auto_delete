@@ -11,9 +11,9 @@ WORKDIR /app
 # Copy the requirements file
 COPY requirements.txt .
 
-# Install dependencies
-RUN pip3 install --upgrade pip \
-    && pip3 install -r requirements.txt
+# Upgrade pip and install dependencies
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
 # Copy the application code
 COPY . .
@@ -25,4 +25,4 @@ COPY .env ./
 EXPOSE 5000
 
 # Command to run the application
-CMD ["python3", "main.py"]
+CMD ["python", "main.py"]
