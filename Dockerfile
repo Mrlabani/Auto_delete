@@ -25,4 +25,4 @@ COPY .env ./
 EXPOSE 5000
 
 # Command to run the application
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
