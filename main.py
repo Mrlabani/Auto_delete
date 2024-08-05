@@ -1,16 +1,20 @@
 import asyncio
-from os import environ
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters, idle
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Environment variables
-API_ID = int(environ.get("API_ID"))
-API_HASH = environ.get("API_HASH")
-BOT_TOKEN = environ.get("BOT_TOKEN")
-SESSION = environ.get("SESSION")
-TIME = int(environ.get("TIME"))
-GROUPS = [int(grp) for grp in environ.get("GROUPS").split()]
-ADMINS = [int(usr) for usr in environ.get("ADMINS").split()]
+API_ID = int(os.getenv("API_ID"))
+API_HASH = os.getenv("API_HASH")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+SESSION = os.getenv("SESSION")
+TIME = int(os.getenv("TIME"))
+GROUPS = [int(grp) for grp in os.getenv("GROUPS").split()]
+ADMINS = [int(usr) for usr in os.getenv("ADMINS").split()]
 
 START_MSG = "<b>Hai {},\nI'm a private bot of @l_abani to delete group messages after a specific time</b>"
 
@@ -19,15 +23,13 @@ User = Client(name="user-account",
               session_string=SESSION,
               api_id=API_ID,
               api_hash=API_HASH,
-              workers=300
-              )
+              workers=300)
 
 Bot = Client(name="auto-delete",
              api_id=API_ID,
              api_hash=API_HASH,
              bot_token=BOT_TOKEN,
-             workers=300
-             )
+             workers=300)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -75,15 +77,15 @@ def after_request(response):
     return response
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-    idle()
+    from threading import Thread
 
-# Stop clients
-async def stop_clients():
-    await User.stop()
-    print("User Stopped!")
-    await Bot.stop()
-    print("Bot Stopped!")
+    # Run Flask app in a separate thread
+    def run_flask():
+        app.run(host='0.0.0.0', port=5000)
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(stop_clients())
+    flask_thread = Thread(target=run_flask)
+    flask_thread.start()
+
+    # Run the asyncio event loop
+    asyncio.get_event_loop().run_forever()
+  
