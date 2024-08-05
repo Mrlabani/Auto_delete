@@ -18,6 +18,9 @@ RUN pip install --upgrade pip \
 # Copy the application code
 COPY . .
 
+# Copy the .env file
+COPY .env ./
+
 # Expose port 5000 for Flask
 EXPOSE 5000
 
