@@ -1,3 +1,4 @@
 Flask==2.3.4
 pyrogram==2.0.42
 pytgcalls==0.7.2
+python-dotenv==1.0.0
